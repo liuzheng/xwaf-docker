@@ -1,0 +1,5 @@
+#!/bin/bash
+
+/etc/init.d/mysql start
+/opt/x-waf-admin/server &
+/usr/local/openresty/nginx/sbin/nginx -g "daemon off;"

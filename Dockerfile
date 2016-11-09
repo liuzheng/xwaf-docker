@@ -21,6 +21,7 @@ WORKDIR /usr/src/
 ADD https://github.com/alibaba/tengine/archive/${NGINX_VERSION}.tar.gz tengine.tar.gz
 ADD https://openresty.org/download/${OPENRESTY_VERSION}.tar.gz openresty.tar.gz
 ADD https://github.com/xsec-lab/x-waf/archive/master.tar.gz x-waf.tar.gz
+ADD https://github.com/xsec-lab/x-waf-admin/releases/download/x-waf-admin0.1/x-waf-admin0.1-linux-amd64.tar.gz x-waf-admin
 
 RUN apt-get update && \
     apt-get -y install libreadline-dev \
@@ -28,6 +29,7 @@ RUN apt-get update && \
                        libpcre3-dev \
                        libssl-dev \
                        perl \
+                       openssl \
                        make \
                        build-essential && \
     tar -zxf openresty.tar.gz && \
@@ -54,7 +56,7 @@ RUN apt-get update && \
         " src/http/ngx_http_special_response.c && \
     cd /usr/src/${OPENRESTY_VERSION} && \
     ./configure && \
-    make && \
+    make -j4 && \
     make install && \
     cd /usr/local/openresty/nginx/conf/ && \
     mv /usr/src/x-waf.tar.gz . && \
@@ -63,6 +65,13 @@ RUN apt-get update && \
     rm -rf x-waf.tar.gz && \
     ln -sf /dev/stdout /usr/local/openresty/nginx/logs/access.log && \
     ln -sf /dev/stderr /usr/local/openresty/nginx/logs/error.log && \
+    cd /opt && \
+    mv /usr/src/x-waf-admin.tar.gz . && \
+    tar -zxf x-waf-admin.tar.gz && \
+    rm -rf x-waf-admin.tar.gz && \
+    debconf-set-selections <<< 'mysql-server mysql-server/root_password password passw0rd' && \
+    debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password passw0rd' && \
+    apt-get -y install mysql-server && \
     apt-get -y remove build-essential && \
     dpkg --get-selections | awk '{print $1}'|cut -d: -f1|grep -- '-dev$' | xargs apt-get remove -y && \
     rm -rf /usr/src && \
@@ -71,7 +80,13 @@ RUN apt-get update && \
     apt-get autoremove -y
 
 ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
+ADD xwaf /xwaf
+ADD init.sql /tmp/init.sql
+RUN chmod +x /xwaf && \
+    /etc/init.d/mysql start && \
+    mysql -u root -ppassw0rd < /tmp/init.sql && \
+    rm -rf /tmp/init.sql
 
-WORKDIR /usr/local/openresty/nginx
+WORKDIR /usr/local/openresty/nginx/conf
 EXPOSE 80 443 5000
-CMD ["/usr/local/openresty/nginx/sbin/nginx","-g","daemon off;"]
+CMD ["/xwaf"]
