@@ -69,9 +69,6 @@ RUN apt-get update && \
     mv /usr/src/x-waf-admin.tar.gz . && \
     tar -zxf x-waf-admin.tar.gz && \
     rm -rf x-waf-admin.tar.gz && \
-    debconf-set-selections <<< 'mysql-server mysql-server/root_password password passw0rd' && \
-    debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password passw0rd' && \
-    apt-get -y install mysql-server && \
     apt-get -y remove build-essential && \
     dpkg --get-selections | awk '{print $1}'|cut -d: -f1|grep -- '-dev$' | xargs apt-get remove -y && \
     rm -rf /usr/src && \
