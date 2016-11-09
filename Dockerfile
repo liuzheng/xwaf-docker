@@ -83,10 +83,10 @@ ADD init_sql.sh /tmp/init_sql.sh
 RUN chmod +x /xwaf && \
     chmod +x /tmp/init_sql.sh && \
     /tmp/init_sql.sh && \
-    mysql -u root -ppassw0rd < /tmp/init.sql && \
+    mysql -u root -ppassword < /tmp/init.sql && \
     rm -rf /tmp/init.sql && \
     rm -rf /tmp/init_sql.sh
 
-WORKDIR /usr/local/openresty/nginx/conf
+WORKDIR /opt/x-waf-admin
 EXPOSE 80 443 5000
 CMD ["/xwaf"]
