@@ -35,10 +35,10 @@ RUN apt-get update && \
     rm -rf ./*  && \
     mv /usr/src/tengine.tar.gz . && \
     tar -zxf tengine.tar.gz && \
-    cd ${NGINX_VERSION} && \
+    cd tengine-${NGINX_VERSION} && \
     cp -R ./* ../ && \
     cd .. && \
-    rm -rf ${NGINX_VERSION}/ && \
+    rm -rf tengine-${NGINX_VERSION}/ && \
     rm -rf tengine.tar.gz && \
     sed -i " \
         /#define TENGINE.*/s/\"Tengine/\"MoeArt Maid-chan/; \
