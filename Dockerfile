@@ -79,10 +79,13 @@ RUN apt-get update && \
 ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 ADD xwaf /xwaf
 ADD init.sql /tmp/init.sql
+ADD init_sql.sh /tmp/init_sql.sh
 RUN chmod +x /xwaf && \
-    /etc/init.d/mysql start && \
+    chmod +x /tmp/init_sql.sh && \
+    /tmp/init_sql.sh && \
     mysql -u root -ppassw0rd < /tmp/init.sql && \
-    rm -rf /tmp/init.sql
+    rm -rf /tmp/init.sql && \
+    rm -rf /tmp/init_sql.sh
 
 WORKDIR /usr/local/openresty/nginx/conf
 EXPOSE 80 443 5000
