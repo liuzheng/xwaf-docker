@@ -21,7 +21,7 @@ WORKDIR /usr/src/
 ADD https://github.com/alibaba/tengine/archive/${NGINX_VERSION}.tar.gz tengine.tar.gz
 ADD https://openresty.org/download/${OPENRESTY_VERSION}.tar.gz openresty.tar.gz
 ADD https://github.com/xsec-lab/x-waf/archive/master.tar.gz x-waf.tar.gz
-ADD https://github.com/xsec-lab/x-waf-admin/releases/download/x-waf-admin0.1/x-waf-admin0.1-linux-amd64.tar.gz x-waf-admin
+ADD https://github.com/xsec-lab/x-waf-admin/releases/download/x-waf-admin0.1/x-waf-admin0.1-linux-amd64.tar.gz x-waf-admin.tar.gz
 
 RUN apt-get update && \
     apt-get -y install libreadline-dev \
