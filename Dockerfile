@@ -1,4 +1,4 @@
-FROM debian
+FROM ubuntu
 
 MAINTAINER MoeArt Developmemnt Team <dev@art.moe>
 
