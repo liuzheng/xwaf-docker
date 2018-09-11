@@ -2,8 +2,8 @@ FROM debian
 
 MAINTAINER MoeArt Developmemnt Team <dev@art.moe>
 
-ENV NGINX_VERSION tengine-2.1.2_f
-ENV OPENRESTY_VERSION openresty-1.11.2.1
+ENV NGINX_VERSION tengine-2.2.2
+ENV OPENRESTY_VERSION openresty-1.13.6.2
 
 ENV   DEBIAN_FRONTEND noninteractive
 ENV   LANGUAGE en_US.UTF-8
